@@ -30,4 +30,4 @@ enum {
  * reason the function returns false.  The timeout is passed to the prompt
  * functions below if they are called.
  */
-bool auth(const char *user, struct timespec *timeout, GError **error);
+bool auth(const char *user, struct timespec *timeout, const char *vlock_password_prompt, GError **error);

@@ -132,7 +132,7 @@ fail:
   return PAM_CONV_ERR;
 }
 
-bool auth(const char *user, struct timespec *timeout, GError **error)
+bool auth(const char *user, struct timespec *timeout, const char *vlock_password_prompt_message, GError **error)
 {
   char *pam_tty;
   pam_handle_t *pamh;
@@ -176,6 +176,12 @@ bool auth(const char *user, struct timespec *timeout, GError **error)
                           pam_strerror(pamh, pam_status)));
       goto end;
     }
+  }
+
+  /* Print vlock password prompt message if there is one. */
+  if (vlock_password_prompt_message && *vlock_password_prompt_message) {
+    fputs(vlock_password_prompt_message, stderr);
+    fputc('\n', stderr);
   }
 
   /* put the username before the password prompt */

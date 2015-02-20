@@ -58,6 +58,7 @@ static void auth_loop(const char *username)
   struct timespec *prompt_timeout;
   struct timespec *wait_timeout;
   char *vlock_message;
+  char *vlock_password_prompt_message;
   const char *auth_names[] = { username, "root", NULL };
 
   /* If NO_ROOT_PASS is defined or the username is "root" ... */
@@ -69,6 +70,7 @@ static void auth_loop(const char *username)
 
   /* Get the vlock message from the environment. */
   vlock_message = getenv("VLOCK_MESSAGE");
+  vlock_password_prompt_message = getenv("VLOCK_PASSWORD_PROMPT_MESSAGE");
 
   if (vlock_message == NULL) {
     if (console_switch_locked)
@@ -114,7 +116,7 @@ static void auth_loop(const char *username)
     }
 
     for (size_t i = 0; auth_names[i] != NULL; i++) {
-      if (auth(auth_names[i], prompt_timeout, &err))
+      if (auth(auth_names[i], prompt_timeout, vlock_password_prompt_message, &err))
         goto auth_success;
 
       g_assert(err != NULL);
